@@ -19,6 +19,14 @@ implement history state for jQuery Mobile
         <script src="/js/jquery-1.4.4.min.js"></script>
         <script src="/js/jquery.mobile-1.0a2.min.js"></script>
         <script src="/js/jquery.mobile.useHistoryState.js"></script>
+        <script>
+$(function(){
+  $("#foo").click(function(){
+    e.stopPropagation();
+    $.mobile.changePageWithHistoryState("page-index");
+  });
+});
+        </script>
       </head>
       <body>
 
@@ -47,6 +55,11 @@ implement history state for jQuery Mobile
 
  */
 (function($) {
+
+	$.mobile.changePageWithHistoryState = function(to, transition, back) {
+		$.mobile.changePage(to, transition, back, true);
+	};
+
 $(function() {
 	if (history.pushState === undefined) {
 		return;
