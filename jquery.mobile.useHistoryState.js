@@ -104,8 +104,6 @@ $(function() {
 
 		// location.hash -> location.pathname
 		history.replaceState(pathname, pathname, pathname);
-
-		$.mobile.updateHash(location.hash, true); // force stop hashchange event handling in jquery.mobile.navigation.js
 	});
 
 	$(window).bind( "popstate", function(e) {
