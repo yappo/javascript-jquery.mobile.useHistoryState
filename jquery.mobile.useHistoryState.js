@@ -61,7 +61,7 @@ $(function(){
 	};
 
 $(function() {
-	if (history.pushState === undefined) {
+	if (!$.support.pushState) {
 		return;
 	}
 
