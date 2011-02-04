@@ -56,8 +56,11 @@ $(function(){
  */
 (function($) {
 
-	$.mobile.changePageWithHistoryState = function(to, transition, back) {
-		$.mobile.changePage(to, transition, back, true);
+	$.mobile.changePageWithHistoryState = function(to, transition, reverse, changeHash, fromHashChange) {
+		if (changeHash === undefined) {
+			changeHash = true;
+		}
+		$.mobile.changePage(to, transition, reverse, changeHash, fromHashChange);
 	};
 
 $(function() {
@@ -93,10 +96,6 @@ $(function() {
 	}
 
 	$(window).bind( "hashchange", function(e, triggered) {
-		if( $(".ui-page-active").is("[data-role=" + $.mobile.nonHistorySelectors + "]") ){
-			return;
-		}
-
 		if (location.hash === "") {
 			return;
 		}
@@ -107,8 +106,18 @@ $(function() {
 	});
 
 	$(window).bind( "popstate", function(e) {
+		// XXX: force hashchange event disable in jquery.mobile.navigation.js
+		var orighashListeningEnabled = $.mobile.hashListeningEnabled;
+		$.mobile.hashListeningEnabled = false;
+
 		var pageid = path2pageid(e.originalEvent.state);
-		$.mobile.changePage(pageid, undefined, undefined, undefined);
+		$.mobile.changePage(pageid, undefined, undefined, false, true);
+
+		// XXX: force hashchange event disable in jquery.mobile.navigation.js
+		// too tricky...
+		setTimeout(function(){
+			$.mobile.hashListeningEnabled = orighashListeningEnabled;
+		}, 0);
 	});
 	
 });
